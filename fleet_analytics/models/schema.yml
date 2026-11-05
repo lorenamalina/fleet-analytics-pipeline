@@ -1,0 +1,51 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: public
+    description: "Date brute OBD-II scrise de consumer.py din MQTT."
+    tables:
+      - name: obd_telemetry
+
+models:
+  - name: silver_telemetry
+    description: "Telemetrie curățată: fără NULL și fără viteze negative."
+    columns:
+      - name: id
+        tests: [not_null, unique]
+      - name: trip_id
+        tests: [not_null]
+      - name: engine_run_time_s
+        tests: [not_null]
+      - name: vehicle_speed_kmh
+        tests: [not_null]
+      - name: engine_rpm
+        tests: [not_null]
+
+  - name: gold_vehicle_summary
+    description: "Metrici agregate per vehicul."
+    columns:
+      - name: vehicle_id
+        tests: [not_null, unique]
+
+  - name: gold_driving_behavior
+    description: "Accelerație pe secundă și evenimente de condus, per cursă."
+    columns:
+      - name: driving_event
+        tests:
+          - accepted_values:
+              values: ['normal', 'harsh_braking', 'harsh_acceleration']
+
+  - name: gold_trip_summary
+    description: "Rezumat per cursă: timp măsurat, distanță estimată (limită inferioară), viteză medie în mișcare."
+    columns:
+      - name: trip_id
+        tests: [not_null, unique]
+      - name: distance_km
+        tests: [not_null]
+
+  - name: gold_trip_comparison
+    description: "O linie per cursă, cu evenimente de condus și percentila de agresivitate."
+    columns:
+      - name: trip_id
+        tests: [not_null, unique]

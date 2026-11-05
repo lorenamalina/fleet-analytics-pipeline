@@ -1,0 +1,40 @@
+[0m17:08:35  Found 15 data tests, 9 models, 1 source, 475 macros
+[0m17:08:35  
+[0m17:08:35  Concurrency: 1 threads (target='dev')
+[0m17:08:35  
+[0m17:08:35  1 of 15 START test accepted_values_gold_driving_behavior_driving_event__normal__harsh_braking__harsh_acceleration  [RUN]
+[0m17:08:35  1 of 15 PASS accepted_values_gold_driving_behavior_driving_event__normal__harsh_braking__harsh_acceleration  [[32mPASS[0m in 0.12s]
+[0m17:08:35  2 of 15 START test gold_dt_in_range ............................................ [RUN]
+[0m17:08:35  2 of 15 PASS gold_dt_in_range .................................................. [[32mPASS[0m in 0.05s]
+[0m17:08:35  3 of 15 START test not_null_gold_trip_comparison_trip_id ....................... [RUN]
+[0m17:08:35  3 of 15 PASS not_null_gold_trip_comparison_trip_id ............................. [[32mPASS[0m in 0.07s]
+[0m17:08:35  4 of 15 START test not_null_gold_trip_summary_distance_km ...................... [RUN]
+[0m17:08:36  4 of 15 PASS not_null_gold_trip_summary_distance_km ............................ [[32mPASS[0m in 0.05s]
+[0m17:08:36  5 of 15 START test not_null_gold_trip_summary_trip_id .......................... [RUN]
+[0m17:08:36  5 of 15 PASS not_null_gold_trip_summary_trip_id ................................ [[32mPASS[0m in 0.13s]
+[0m17:08:36  6 of 15 START test not_null_gold_vehicle_summary_vehicle_id .................... [RUN]
+[0m17:08:36  6 of 15 PASS not_null_gold_vehicle_summary_vehicle_id .......................... [[32mPASS[0m in 0.05s]
+[0m17:08:36  7 of 15 START test not_null_silver_telemetry_engine_rpm ........................ [RUN]
+[0m17:08:36  7 of 15 PASS not_null_silver_telemetry_engine_rpm .............................. [[32mPASS[0m in 0.06s]
+[0m17:08:36  8 of 15 START test not_null_silver_telemetry_engine_run_time_s ................. [RUN]
+[0m17:08:36  8 of 15 PASS not_null_silver_telemetry_engine_run_time_s ....................... [[32mPASS[0m in 0.05s]
+[0m17:08:36  9 of 15 START test not_null_silver_telemetry_id ................................ [RUN]
+[0m17:08:36  9 of 15 PASS not_null_silver_telemetry_id ...................................... [[32mPASS[0m in 0.07s]
+[0m17:08:36  10 of 15 START test not_null_silver_telemetry_trip_id .......................... [RUN]
+[0m17:08:36  10 of 15 PASS not_null_silver_telemetry_trip_id ................................ [[32mPASS[0m in 0.07s]
+[0m17:08:36  11 of 15 START test not_null_silver_telemetry_vehicle_speed_kmh ................ [RUN]
+[0m17:08:36  11 of 15 PASS not_null_silver_telemetry_vehicle_speed_kmh ...................... [[32mPASS[0m in 0.05s]
+[0m17:08:36  12 of 15 START test unique_gold_trip_comparison_trip_id ........................ [RUN]
+[0m17:08:36  12 of 15 PASS unique_gold_trip_comparison_trip_id .............................. [[32mPASS[0m in 0.06s]
+[0m17:08:36  13 of 15 START test unique_gold_trip_summary_trip_id ........................... [RUN]
+[0m17:08:36  13 of 15 PASS unique_gold_trip_summary_trip_id ................................. [[32mPASS[0m in 0.07s]
+[0m17:08:36  14 of 15 START test unique_gold_vehicle_summary_vehicle_id ..................... [RUN]
+[0m17:08:36  14 of 15 PASS unique_gold_vehicle_summary_vehicle_id ........................... [[32mPASS[0m in 0.08s]
+[0m17:08:36  15 of 15 START test unique_silver_telemetry_id ................................. [RUN]
+[0m17:08:36  15 of 15 PASS unique_silver_telemetry_id ....................................... [[32mPASS[0m in 0.15s]
+[0m17:08:36  
+[0m17:08:36  Finished running 15 data tests in 0 hours 0 minutes and 1.49 seconds (1.49s).
+[0m17:08:37  
+[0m17:08:37  [32mCompleted successfully[0m
+[0m17:08:37  
+[0m17:08:37  Done. PASS=15 WARN=0 ERROR=0 SKIP=0 TOTAL=15

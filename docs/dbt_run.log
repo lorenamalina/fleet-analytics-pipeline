@@ -1,0 +1,25 @@
+[0m17:08:25  
+[0m17:08:26  1 of 9 START sql table model public.silver_telemetry ........................... [RUN]
+[0m17:08:28  1 of 9 OK created sql table model public.silver_telemetry ...................... [[32mSELECT 97017[0m in 1.48s]
+[0m17:08:28  2 of 9 START sql table model public.gold_driving_behavior ...................... [RUN]
+[0m17:08:28  2 of 9 OK created sql table model public.gold_driving_behavior ................. [[32mSELECT 25911[0m in 0.67s]
+[0m17:08:28  3 of 9 START sql table model public.gold_engine_load ........................... [RUN]
+[0m17:08:29  3 of 9 OK created sql table model public.gold_engine_load ...................... [[32mSELECT 39[0m in 0.34s]
+[0m17:08:29  4 of 9 START sql table model public.gold_engine_warmup ......................... [RUN]
+[0m17:08:29  4 of 9 OK created sql table model public.gold_engine_warmup .................... [[32mSELECT 39[0m in 0.30s]
+[0m17:08:29  5 of 9 START sql table model public.gold_vehicle_summary ....................... [RUN]
+[0m17:08:29  5 of 9 OK created sql table model public.gold_vehicle_summary .................. [[32mSELECT 1[0m in 0.30s]
+[0m17:08:29  6 of 9 START sql table model public.gold_trip_phases ........................... [RUN]
+[0m17:08:29  6 of 9 OK created sql table model public.gold_trip_phases ...................... [[32mSELECT 25911[0m in 0.18s]
+[0m17:08:29  7 of 9 START sql table model public.gold_stops ................................. [RUN]
+[0m17:08:30  7 of 9 OK created sql table model public.gold_stops ............................ [[32mSELECT 6972[0m in 0.29s]
+[0m17:08:30  8 of 9 START sql table model public.gold_trip_summary .......................... [RUN]
+[0m17:08:30  8 of 9 OK created sql table model public.gold_trip_summary ..................... [[32mSELECT 39[0m in 0.11s]
+[0m17:08:30  9 of 9 START sql table model public.gold_trip_comparison ....................... [RUN]
+[0m17:08:30  9 of 9 OK created sql table model public.gold_trip_comparison .................. [[32mSELECT 39[0m in 0.11s]
+[0m17:08:30  
+[0m17:08:30  Finished running 9 table models in 0 hours 0 minutes and 5.01 seconds (5.01s).
+[0m17:08:30  
+[0m17:08:30  [32mCompleted successfully[0m
+[0m17:08:30  
+[0m17:08:30  Done. PASS=9 WARN=0 ERROR=0 SKIP=0 TOTAL=9
