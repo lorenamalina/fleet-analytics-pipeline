@@ -1,73 +1,64 @@
-import json
+import os
 import paho.mqtt.client as mqtt
 import psycopg2
-from datetime import datetime
 
-# Configurări MQTT
-MQTT_BROKER = "127.0.0.1"
-MQTT_PORT = 1883
+from common.telemetry import parse_message
+
+MQTT_BROKER = os.environ.get("MQTT_BROKER", "127.0.0.1")
+MQTT_PORT = int(os.environ.get("MQTT_PORT", "1883"))
 MQTT_TOPIC = "fleet/telemetry"
 
-# Configurări PostgreSQL (din .env-ul tău)
-DB_HOST = "127.0.0.1"
-DB_PORT = "5432"
-DB_USER = "fleet"
-DB_PASS = "1234"
-DB_NAME = "postgres"
+DB_HOST = os.environ.get("POSTGRES_HOST", "127.0.0.1")
+DB_PORT = os.environ.get("POSTGRES_PORT", "5432")
+DB_USER = os.environ["POSTGRES_USER"]
+DB_PASS = os.environ["POSTGRES_PASSWORD"]
+DB_NAME = os.environ["POSTGRES_DB"]
 
-# Conectarea la baza de date
-try:
-    conn = psycopg2.connect(
-        host=DB_HOST,
-        port=DB_PORT,
-        user=DB_USER,
-        password=DB_PASS,
-        dbname=DB_NAME
-    )
+INSERT_QUERY = """
+    INSERT INTO obd_telemetry
+    (vehicle_id, trip_id, timestamp, engine_run_time_s, vehicle_speed_kmh,
+     engine_rpm, throttle_pct, engine_load_pct, coolant_temp_c)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+"""
+
+
+def connect_db():
+    conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, user=DB_USER,
+                            password=DB_PASS, dbname=DB_NAME)
     conn.autocommit = True
-    cursor = conn.cursor()
-    print("Conectat cu succes la PostgreSQL!")
-except Exception as e:
-    print(f"Eroare la conectarea la baza de date: {e}")
-    exit(1)
+    return conn
 
-# Funcția care se declanșează la fiecare mesaj nou primit din MQTT
+
 def on_message(client, userdata, msg):
     try:
-        payload = json.loads(msg.payload.decode("utf-8"))
-
-        v_id = payload["vehicle_id"]
-        trip_id = payload.get("trip_id")
-        timestamp = payload["timestamp"]
-        run_time = payload.get("engine_run_time_s")
-        speed = payload["vehicle_speed_kmh"]
-        rpm = payload["engine_rpm"]
-        throttle = payload.get("throttle_pct")
-        load = payload.get("engine_load_pct")
-        coolant = payload.get("coolant_temp_c")
-
-        insert_query = """
-            INSERT INTO obd_telemetry
-            (vehicle_id, trip_id, timestamp, engine_run_time_s, vehicle_speed_kmh,
-             engine_rpm, throttle_pct, engine_load_pct, coolant_temp_c)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
-        """
-        cursor.execute(insert_query, (v_id, trip_id, timestamp, run_time, speed,
-                                      rpm, throttle, load, coolant))
-        print(f"[SALVAT] {trip_id} | {run_time}s | {speed} km/h | {rpm} RPM")
-
+        p = parse_message(msg.payload)
+        userdata["cursor"].execute(INSERT_QUERY, (
+            p["vehicle_id"], p.get("trip_id"), p["timestamp"],
+            p.get("engine_run_time_s"), p["vehicle_speed_kmh"],
+            p["engine_rpm"], p.get("throttle_pct"),
+            p.get("engine_load_pct"), p.get("coolant_temp_c"),
+        ))
+        print(f"[SALVAT] {p.get('trip_id')} | {p.get('engine_run_time_s')}s")
     except Exception as e:
-        print(f"[EROARE] Procesare mesaj eșuată: {e}")
-    except Exception as e:
-        print(f"[EROARE] Procesare mesaj eșuată: {e}")
+        print(f"[EROARE] Procesare mesaj esuata: {e}")
 
-# Setăm clientul MQTT
-client = mqtt.Client("Postgres_Ingestion_Service")
-client.on_message = on_message
 
-print("Se conectează la MQTT...")
-client.connect(MQTT_BROKER, MQTT_PORT)
-client.subscribe(MQTT_TOPIC)
+def main():
+    conn = connect_db()
+    print("Conectat la PostgreSQL")
+    # clean_session=False: brokerul pastreaza mesajele QoS 1 cat timp consumer-ul e oprit
+    client = mqtt.Client("Postgres_Ingestion_Service", clean_session=False,
+                         userdata={"cursor": conn.cursor()})
+    client.on_message = on_message
+    client.connect(MQTT_BROKER, MQTT_PORT)
+    client.subscribe(MQTT_TOPIC, qos=1)
+    print("Consumatorul asculta mesaje... (Ctrl+C pentru oprire)")
+    try:
+        client.loop_forever()
+    except KeyboardInterrupt:
+        print("Oprit.")
+        client.disconnect()
 
-print("Consumatorul ascultă mesaje... (Apasă Ctrl+C pentru a opri)")
-client.loop_forever()
+
+if __name__ == "__main__":
+    main()
