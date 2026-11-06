@@ -2,7 +2,7 @@
 # Test end-to-end: CSV mic -> MQTT -> consumer -> tabela de test -> reconciliere.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
-set -a; source .env; set +a
+if [ -f .env ]; then set -a; source .env; set +a; fi
 
 export TARGET_TABLE=obd_telemetry_test
 export MQTT_TOPIC=fleet/telemetry_test
