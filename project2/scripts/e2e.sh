@@ -6,12 +6,17 @@ set -a; source .env; set +a
 
 export TARGET_TABLE=obd_telemetry_test
 export MQTT_TOPIC=fleet/telemetry_test
-export MQTT_CLIENT_ID=e2e_consumer
+export MQTT_CLIENT_ID="e2e_consumer_$(date +%s)"
 export DATA_GLOB="project2/tests/data/live*.csv"
 export SLEEP_S=0.001
 export PYTHONPATH=src
 
-PSQL="docker exec project-postgres-1 psql -U $POSTGRES_USER -d $POSTGRES_DB -q"
+if command -v psql >/dev/null 2>&1; then
+  export PGHOST="${POSTGRES_HOST:-127.0.0.1}" PGPORT="${POSTGRES_PORT:-5432}" PGPASSWORD="$POSTGRES_PASSWORD"
+  PSQL="psql -U $POSTGRES_USER -d $POSTGRES_DB -q"
+else
+  PSQL="docker exec project-postgres-1 psql -U $POSTGRES_USER -d $POSTGRES_DB -q"
+fi
 $PSQL -c "DROP TABLE IF EXISTS $TARGET_TABLE"
 $PSQL -c "CREATE TABLE $TARGET_TABLE (LIKE obd_telemetry INCLUDING DEFAULTS)"
 
