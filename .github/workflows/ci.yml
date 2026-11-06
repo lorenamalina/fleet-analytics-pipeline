@@ -20,6 +20,7 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     needs: unit-tests
     services:
       postgres:
@@ -59,3 +60,8 @@ jobs:
         run: psql -h 127.0.0.1 -U fleet -d postgres -q -f project2/scripts/schema.sql
       - name: Run end-to-end test
         run: ./project2/scripts/e2e.sh
+      - name: Show consumer log on failure
+        if: failure()
+        run: |
+          echo "--- consumer log ---"; cat /tmp/e2e_consumer.log || true
+          echo "--- mosquitto log ---"; docker logs mosquitto || true
